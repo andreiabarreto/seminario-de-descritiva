@@ -1,1 +1,568 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Autores: Andréia Barreto e Sofia Frigeri" />
+  <title>Julgamento de Bruxaria na Escócia</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title"><strong>Julgamento de Bruxaria na
+Escócia</strong></h1>
+<p class="author"><strong>Autores:</strong> Andréia Barreto e Sofia
+Frigeri</p>
+<p class="date"><strong>Data:</strong> <code>r Sys.Date()</code></p>
+</header>
+<p>```{r pacotes, include=FALSE} knitr::opts_chunk$set(echo = FALSE)</p>
+<p>library(knitr)</p>
+<pre><code>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)</code></pre>
+<pre class="{r}"><code>#Carregamento dos dados
+arquivos_txt &lt;- list.files(
+  path = &quot;dados&quot;,
+  pattern = &quot;\\.txt$&quot;,
+  full.names = TRUE
+)
 
+nomes &lt;- tools::file_path_sans_ext(basename(arquivos_txt))
+
+dados_lista &lt;- setNames(
+  lapply(
+    arquivos_txt,
+    function(x)
+      read.csv(
+        x,
+        stringsAsFactors = FALSE
+      )
+  ),
+  nomes
+)
+
+accused &lt;- dados_lista$WDB_Accused
+trial   &lt;- dados_lista$WDB_Trial
+person  &lt;- dados_lista$WDB_Person
+case    &lt;- dados_lista$WDB_Case</code></pre>
+<style>
+/* LAYOUT PRINCIPAL (expande e aproxima do índice) */
+.main-container {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 5px;
+  padding-right: 15px;
+}
+
+/* TEXTO */
+body {
+  font-size: 17px;
+}
+
+p {
+  text-align: justify;
+}
+
+/* TÍTULOS */
+h1 {
+  font-family: Garamond, serif;
+  font-size: 38px;
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid #d3d3d3;
+}
+
+h2 {
+  font-size: 28px;
+}
+
+h1, h2 {
+  color: #1b5e20;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+/* ÍNDICE (TOC) */
+.tocify {
+  width: 420px;
+  height: 90vh;
+  font-size: 20px;
+  line-height: 1.8;
+  overflow-y: auto;
+  left: 50px;
+}
+
+.tocify-wrapper {
+  left: 50px;
+}
+
+.tocify .active {
+  background-color: #2E7D32;
+  color: white !important;
+  border-radius: 4px;
+}
+
+.tocify-item a {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.tocify-subheader {
+  font-size: 18px;
+}
+</style>
+<div style="max-width: 900px; margin: 0 auto;">
+<p><img src="seminariocapa.jpg" style="width: 70%; height: auto; display: block; margin: 0 auto;"></p>
+</div>
+<p style="text-align:center; font-size:12px; margin-top:15px;">
+Fonte: NEWES from Scotland, declaring the damnable life and death of
+Doctor Fian, a notable sorcerer. Londres: William Wright, 1591. 1
+xilogravura. Disponível em: Coleções Especiais da Biblioteca da
+Universidade de Glasgow. Acesso em: 21 jun. 2026.
+</p>
+<div style="
+  max-width: 900px;
+  margin: 15px auto 30px auto;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: justify;
+">
+<p><b>Nota da imagem:</b><br />
+A xilogravura de 1591, extraída do panfleto <i>Newes from Scotland</i>,
+representa visualmente o pânico moral associado aos julgamentos de
+bruxaria na Escócia no final do século XVI, especialmente no contexto
+dos eventos conhecidos como os julgamentos de North Berwick.</p>
+<p>A composição da imagem organiza diferentes elementos associados às
+acusações de feitiçaria. À esquerda, a figura do Diabo simboliza a
+crença no pacto satânico atribuído às acusadas. Em outra cena, mulheres
+aparecem preparando substâncias em um caldeirão, associadas às práticas
+de <i>maleficium</i>. Na parte superior, o naufrágio de embarcações
+representa acusações de tempestades e desastres naturais supostamente
+causados por bruxaria. Já no centro, a presença de escribas e
+autoridades registra os interrogatórios e depoimentos, evidenciando o
+caráter institucional e jurídico dos julgamentos.</p>
+<p>A obra reflete como eventos políticos e fenômenos naturais eram
+interpretados, no período, a partir de explicações sobrenaturais,
+contribuindo para a construção de narrativas de perseguição e controle
+social. Nesse sentido, o material visual também pode ser entendido como
+parte da difusão e legitimação dessas interpretações durante o período
+moderno.</p>
+<p>Atualmente preservada nas Coleções Especiais da Biblioteca da
+Universidade de Glasgow, a xilogravura constitui uma importante fonte
+histórica para o estudo das representações da bruxaria e dos mecanismos
+de produção do medo e da acusação na Escócia moderna.</p>
+</div>
+<h1 id="introdução">1. Introdução</h1>
+<p>Os julgamentos de bruxaria ocorridos na Europa entre os séculos XVI e
+XVIII constituem um importante objeto de estudo para a compreensão das
+relações sociais, religiosas e jurídicas da Idade Moderna. Além de seu
+impacto histórico, os registros desses processos permitem investigar
+características dos indivíduos acusados e os contextos em que as
+acusações ocorreram. Entre os aspectos mais discutidos está a
+predominância de mulheres entre os acusados, o que torna os julgamentos
+de bruxaria uma fonte relevante para o estudo das relações de gênero.
+Nesse sentido, a análise de informações como sexo, idade, localização
+geográfica e vínculos familiares pode contribuir para uma compreensão
+mais ampla dos padrões de acusação. Utilizando dados do Survey of
+Scottish Witchcraft (1563–1736), projeto desenvolvido por pesquisadores
+da Universidade de Edimburgo, este trabalho realiza uma análise
+exploratória dos julgamentos de bruxaria na Escócia, buscando
+identificar características dos acusados, sua distribuição espacial e
+possíveis relações entre gênero e os perfis mais frequentemente
+envolvidos nas acusações.</p>
+<h1 id="objetivos">2. Objetivos</h1>
+<h3 id="objetivo-geral">2.1 Objetivo Geral</h3>
+<p>Realizar uma análise exploratória dos registros de julgamentos de
+bruxaria na Escócia entre 1563 e 1736, identificando padrões
+demográficos, espaciais e sociais presentes nas acusações.</p>
+<h3 id="objetivos-específicos">2.2 Objetivos Específicos</h3>
+<ul>
+<li>Descrever o perfil dos acusados a partir de variáveis como sexo,
+idade e estado civil;</li>
+<li>Analisar a distribuição geográfica das acusações entre os condados
+escoceses;</li>
+<li>Investigar a duração dos processos judiciais registrados na base de
+dados;</li>
+<li>Examinar a participação de homens e mulheres nos registros de
+acusação;</li>
+<li>Identificar possíveis padrões de relações familiares associados aos
+acusados, considerando especialmente as questões de gênero.</li>
+</ul>
+<h1 id="banco-de-dados">3. Banco de Dados</h1>
+<h3 id="fonte-dos-dados">3.1 Fonte dos dados</h3>
+<ul>
+<li>Julian Goodare, Lauren Martin, Joyce Miller e Louise Yeoman. Survey
+of Scottish Witchcraft. Disponível em: www.arts.ed.ac.uk/witches/
+(versão arquivada em janeiro de 2003). Acesso em: 21/06/2026.</li>
+</ul>
+<h3 id="estrutura-do-banco-de-dados">3.2 Estrutura do banco de
+dados</h3>
+<p>Os dados utilizados neste trabalho foram obtidos a partir do
+<em>Survey of Scottish Witchcraft</em>, projeto desenvolvido por
+pesquisadores da Universidade de Edimburgo. A base reúne informações
+sobre julgamentos de bruxaria ocorridos na Escócia entre os anos de 1563
+e 1736, incluindo características dos acusados, registros dos processos
+e informações geográficas. Para a presente análise foram utilizadas
+informações referentes ao perfil dos acusados, como sexo, idade, estado
+civil e local de residência, além de dados relacionados aos processos
+judiciais. Também foram empregados dados espaciais para a construção de
+mapas temáticos da distribuição das acusações entre os condados
+escoceses.</p>
+<h3 id="classificação-das-variáveis">3.3 Classificação das
+variáveis</h3>
+<h4 id="variáveis-quantitativas">Variáveis quantitativas</h4>
+<ul>
+<li>Ano de início do julgamento</li>
+<li>Duração dos julgamentos (em dias)</li>
+</ul>
+<h4 id="variáveis-qualitativas-binárias">Variáveis qualitativas
+binárias</h4>
+<ul>
+<li>Gênero (masculino/feminino) (opcional depois: confissão ou
+tortura)</li>
+<li>Confissão</li>
+<li>Tortura</li>
+</ul>
+<h4 id="variáveis-qualitativas-nominais">Variáveis qualitativas
+nominais</h4>
+<ul>
+<li>Condado da Escócia</li>
+<li>Relações familiares dos acusados</li>
+</ul>
+<h1 id="metodologia">4. Metodologia</h1>
+<p>As análises foram realizadas na linguagem de programação R,
+utilizando o ambiente de desenvolvimento RStudio. Para a manipulação e
+organização dos dados foram empregados pacotes do conjunto tidyverse,
+enquanto a construção dos gráficos foi realizada principalmente com o
+pacote ggplot2. Para as análises espaciais e elaboração dos mapas
+temáticos foram utilizados pacotes voltados ao tratamento de dados
+geográficos, como sf.</p>
+<p>Inicialmente, os arquivos da base Survey of Scottish Witchcraft foram
+importados e organizados para a seleção das variáveis de interesse.
+Durante a etapa de preparação dos dados, verificou-se que a variável
+idade apresentava elevado número de valores ausentes, com apenas 166
+registros válidos entre 3219 observações. Em razão da baixa completude
+dessa informação, optou-se por não incluí-la nas análises estatísticas
+desenvolvidas neste trabalho.</p>
+<p>Para as variáveis quantitativas, foram calculadas medidas de
+tendência central, como média, mediana e moda, além de medidas de
+dispersão, incluindo amplitude, variância, desvio padrão e quartis.
+Essas informações foram complementadas por histogramas e boxplots,
+permitindo uma melhor visualização da distribuição dos dados e da
+presença de possíveis valores atípicos.</p>
+<p>As variáveis qualitativas foram analisadas por meio de tabelas de
+frequência absoluta e relativa, acompanhadas de gráficos de barras para
+facilitar a interpretação dos resultados. Também foram exploradas
+associações entre variáveis, utilizando gráficos de dispersão e o
+coeficiente de correlação de Pearson para variáveis quantitativas, além
+de tabelas de contingência e medidas de associação para variáveis
+categóricas.</p>
+<p>Por fim, foram construídos mapas coropléticos para representar a
+distribuição geográfica dos casos de bruxaria nos condados escoceses,
+possibilitando a identificação de padrões espaciais e regiões com maior
+concentração de acusações.</p>
+<h1 id="análises-descritivas">5. Análises Descritivas</h1>
+<h3 id="variáveis-quantitativas-1">5.1 Variáveis quantitativas</h3>
+<h4 id="ano-de-início-dos-julgamentos"><strong>Ano de início dos
+julgamentos</strong></h4>
+<div style="max-width: 900px; margin: 0 auto;">
+<table style="border-collapse: collapse; width: 100%; text-align: center; font-family: Arial; font-size: 14px;">
+<thead>
+<tr style="background-color: #e8f5e9; color: #000;">
+<th style="border: 1px solid #ccc; padding: 8px;">
+Casos
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Média
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Mediana
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Desvio padrão
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Mínimo
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Quartil 1 (Q1)
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Quartil 3 (Q3)
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Intervalo interquartil (IQR)
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Máximo
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Amplitude
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Assimetria
+</th>
+<th style="border: 1px solid #ccc; padding: 8px;">
+Curtose
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="border: 1px solid #ccc; padding: 8px;">
+2293
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+1644.904
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+1649
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+26.156
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+1507
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+1629
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+1661
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+32
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+1719
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+212
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+-0.593
+</td>
+<td style="border: 1px solid #ccc; padding: 8px;">
+0.95
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code>{r, echo=FALSE, out.width="100%"} knitr::include_graphics("histograma_ano.png")</code></p>
+<h4 id="interpretação-do-gráfico">Interpretação do gráfico</h4>
+<ul>
+<li><strong>Histograma (verde)</strong>: mostra a distribuição dos anos
+de início dos julgamentos;</li>
+<li><strong>Linha preta suave</strong>: estimativa da forma contínua da
+distribuição (densidade);</li>
+<li><strong>Linha preta vertical</strong>: média dos anos;</li>
+<li><strong>Linha marrom vertical</strong>: mediana (valor
+central);</li>
+<li><strong>Linhas tracejadas</strong>: quartis (Q1 = 25% dos dados, Q3
+= 75%).</li>
+</ul>
+<h4 id="número-de-acusações-por-acusado"><strong>Número de acusações por
+acusado</strong></h4>
+<pre class="{r}"><code>summary(case$dias)</code></pre>
+<h3 id="variáveis-qualitativas-binárias-1">5.2 Variáveis qualitativas
+binárias</h3>
+<h4 id="gênero-dos-acusados"><strong>Gênero dos acusados</strong></h4>
+<h4 id="confissão-simnão"><strong>Confissão (sim/não)</strong></h4>
+<h4 id="tortura-simnão"><strong>Tortura (sim/não)</strong></h4>
+<h3 id="variáveis-qualitativas-nominais-1">5.2 Variáveis qualitativas
+nominais</h3>
+<h4 id="condados-da-escócia"><strong>Condados da Escócia</strong></h4>
+<h4 id="relação-familiar-do-acusado"><strong>Relação familiar do
+acusado</strong></h4>
+<blockquote>
+<p>Gráfico de barras horizontais</p>
+</blockquote>
+<p><code>{r, echo=FALSE, out.width="100%", fig.align="center"} knitr::include_graphics("grafico_condado.png")</code></p>
+<p style="text-align:center; font-size:12px; margin-top:-10px;">
+Fonte: Survey of Scottish Witchcraft (University of Edinburgh)
+</p>
+<blockquote>
+<p>Análise espacial</p>
+</blockquote>
+<p><code>{r, echo=FALSE, out.width="100%"} knitr::include_graphics("mapa_foto.png")</code></p>
+<p style="text-align:center; font-size:12px; margin-top:-10px;">
+Fonte: Survey of Scottish Witchcraft (University of Edinburgh)
+</p>
+<h1 id="análise-de-associação-entre-variáveis">6. Análise de associação
+entre variáveis</h1>
+<h3 id="quantitativa-quantitativa">6.1 Quantitativa × Quantitativa</h3>
+<h3 id="qualitativa-qualitativa">6.2 Qualitativa × Qualitativa</h3>
+<h3 id="qualitativa-quantitativa">6.3 Qualitativa × Quantitativa</h3>
+<h1 id="discussão-dos-resultados">7. Discussão dos resultados</h1>
+<h1 id="conclusão">8. Conclusão</h1>
+<h1 id="referências">9. Referências</h1>
+<h1 id="apêndice">10. Apêndice</h1>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"0357a45f23a943f08700f7f9af191ee6","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
