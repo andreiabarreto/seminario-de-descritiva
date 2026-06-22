@@ -1,0 +1,319 @@
+---
+title: "**Julgamento de Bruxaria na Escócia**"
+author: "**Autores:** Andréia Barreto e Sofia Frigeri"
+date: "**Data:** `r Sys.Date()`"
+
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    df_print: paged
+    self_contained: true
+---
+```{r pacotes, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(knitr)
+
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r}
+#Carregamento dos dados
+arquivos_txt <- list.files(
+  path = "dados",
+  pattern = "\\.txt$",
+  full.names = TRUE
+)
+
+nomes <- tools::file_path_sans_ext(basename(arquivos_txt))
+
+dados_lista <- setNames(
+  lapply(
+    arquivos_txt,
+    function(x)
+      read.csv(
+        x,
+        stringsAsFactors = FALSE
+      )
+  ),
+  nomes
+)
+
+accused <- dados_lista$WDB_Accused
+trial   <- dados_lista$WDB_Trial
+person  <- dados_lista$WDB_Person
+case    <- dados_lista$WDB_Case
+```
+
+
+<style>
+/* LAYOUT PRINCIPAL (expande e aproxima do índice) */
+.main-container {
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 5px;
+  padding-right: 15px;
+}
+
+/* TEXTO */
+body {
+  font-size: 17px;
+}
+
+p {
+  text-align: justify;
+}
+
+/* TÍTULOS */
+h1 {
+  font-family: Garamond, serif;
+  font-size: 38px;
+  margin-top: 60px;
+  padding-top: 20px;
+  border-top: 1px solid #d3d3d3;
+}
+
+h2 {
+  font-size: 28px;
+}
+
+h1, h2 {
+  color: #1b5e20;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+/* ÍNDICE (TOC) */
+.tocify {
+  width: 420px;
+  height: 90vh;
+  font-size: 20px;
+  line-height: 1.8;
+  overflow-y: auto;
+  left: 50px;
+}
+
+.tocify-wrapper {
+  left: 50px;
+}
+
+.tocify .active {
+  background-color: #2E7D32;
+  color: white !important;
+  border-radius: 4px;
+}
+
+.tocify-item a {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.tocify-subheader {
+  font-size: 18px;
+}
+</style>
+
+<div style="max-width: 900px; margin: 0 auto;">
+  <img src="seminariocapa.jpg" style="width: 70%; height: auto; display: block; margin: 0 auto;">
+</div>
+
+
+<p style="text-align:center; font-size:12px; margin-top:15px;">
+Fonte: NEWES from Scotland, declaring the damnable life and death of Doctor Fian, a notable sorcerer. Londres: William Wright, 1591. 1 xilogravura. Disponível em: Coleções Especiais da Biblioteca da Universidade de Glasgow. Acesso em: 21 jun. 2026.
+</p>
+
+<div style="
+  max-width: 900px;
+  margin: 15px auto 30px auto;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: justify;
+">
+
+<b>Nota da imagem:</b>  
+A xilogravura de 1591, extraída do panfleto <i>Newes from Scotland</i>, representa visualmente o pânico moral associado aos julgamentos de bruxaria na Escócia no final do século XVI, especialmente no contexto dos eventos conhecidos como os julgamentos de North Berwick.
+
+A composição da imagem organiza diferentes elementos associados às acusações de feitiçaria. À esquerda, a figura do Diabo simboliza a crença no pacto satânico atribuído às acusadas. Em outra cena, mulheres aparecem preparando substâncias em um caldeirão, associadas às práticas de <i>maleficium</i>. Na parte superior, o naufrágio de embarcações representa acusações de tempestades e desastres naturais supostamente causados por bruxaria. Já no centro, a presença de escribas e autoridades registra os interrogatórios e depoimentos, evidenciando o caráter institucional e jurídico dos julgamentos.
+
+A obra reflete como eventos políticos e fenômenos naturais eram interpretados, no período, a partir de explicações sobrenaturais, contribuindo para a construção de narrativas de perseguição e controle social. Nesse sentido, o material visual também pode ser entendido como parte da difusão e legitimação dessas interpretações durante o período moderno.
+
+Atualmente preservada nas Coleções Especiais da Biblioteca da Universidade de Glasgow, a xilogravura constitui uma importante fonte histórica para o estudo das representações da bruxaria e dos mecanismos de produção do medo e da acusação na Escócia moderna.
+
+</div>
+
+# 1. Introdução
+Os julgamentos de bruxaria ocorridos na Europa entre os séculos XVI e XVIII constituem um importante objeto de estudo para a compreensão das relações sociais, religiosas e jurídicas da Idade Moderna. Além de seu impacto histórico, os registros desses processos permitem investigar características dos indivíduos acusados e os contextos em que as acusações ocorreram. Entre os aspectos mais discutidos está a predominância de mulheres entre os acusados, o que torna os julgamentos de bruxaria uma fonte relevante para o estudo das relações de gênero. Nesse sentido, a análise de informações como sexo, idade, localização geográfica e vínculos familiares pode contribuir para uma compreensão mais ampla dos padrões de acusação. Utilizando dados do Survey of Scottish Witchcraft (1563–1736), projeto desenvolvido por pesquisadores da Universidade de Edimburgo, este trabalho realiza uma análise exploratória dos julgamentos de bruxaria na Escócia, buscando identificar características dos acusados, sua distribuição espacial e possíveis relações entre gênero e os perfis mais frequentemente envolvidos nas acusações. 
+
+
+# 2. Objetivos 
+
+### 2.1 Objetivo Geral 
+Realizar uma análise exploratória dos registros de julgamentos de bruxaria na Escócia entre 1563 e 1736, identificando padrões demográficos, espaciais e sociais presentes nas acusações.
+
+### 2.2 Objetivos Específicos 
+- Descrever o perfil dos acusados a partir de variáveis como sexo, idade e estado civil; 
+- Analisar a distribuição geográfica das acusações entre os condados escoceses; 
+- Investigar a duração dos processos judiciais registrados na base de dados; 
+- Examinar a participação de homens e mulheres nos registros de acusação; 
+- Identificar possíveis padrões de relações familiares associados aos acusados, considerando especialmente as questões de gênero. 
+
+
+# 3. Banco de Dados
+
+### 3.1 Fonte dos dados
+- Julian Goodare, Lauren Martin, Joyce Miller e Louise Yeoman. Survey of Scottish Witchcraft. Disponível em: www.arts.ed.ac.uk/witches/ (versão arquivada em janeiro de 2003). Acesso em: 21/06/2026.
+
+### 3.2 Estrutura do banco de dados
+Os dados utilizados neste trabalho foram obtidos a partir do *Survey of Scottish Witchcraft*, projeto desenvolvido por pesquisadores da Universidade de Edimburgo. A base reúne informações sobre julgamentos de bruxaria ocorridos na Escócia entre os anos de 1563 e 1736, incluindo características dos acusados, registros dos processos e informações geográficas. Para a presente análise foram utilizadas informações referentes ao perfil dos acusados, como sexo, idade, estado civil e local de residência, além de dados relacionados aos processos judiciais. Também foram empregados dados espaciais para a construção de mapas temáticos da distribuição das acusações entre os condados escoceses.
+
+### 3.3 Classificação das variáveis
+#### Variáveis quantitativas
+- Ano de início do julgamento
+- Duração dos julgamentos (em dias)
+
+#### Variáveis qualitativas binárias
+- Gênero (masculino/feminino) (opcional depois: confissão ou tortura)
+- Confissão
+- Tortura
+
+#### Variáveis qualitativas nominais
+- Condado da Escócia
+- Relações familiares dos acusados
+
+# 4. Metodologia 
+As análises foram realizadas na linguagem de programação R, utilizando o ambiente de desenvolvimento RStudio. Para a manipulação e organização dos dados foram empregados pacotes do conjunto tidyverse, enquanto a construção dos gráficos foi realizada principalmente com o pacote ggplot2. Para as análises espaciais e elaboração dos mapas temáticos foram utilizados pacotes voltados ao tratamento de dados geográficos, como sf.
+
+Inicialmente, os arquivos da base Survey of Scottish Witchcraft foram importados e organizados para a seleção das variáveis de interesse. Durante a etapa de preparação dos dados, verificou-se que a variável idade apresentava elevado número de valores ausentes, com apenas 166 registros válidos entre 3219 observações. Em razão da baixa completude dessa informação, optou-se por não incluí-la nas análises estatísticas desenvolvidas neste trabalho.
+
+Para as variáveis quantitativas, foram calculadas medidas de tendência central, como média, mediana e moda, além de medidas de dispersão, incluindo amplitude, variância, desvio padrão e quartis. Essas informações foram complementadas por histogramas e boxplots, permitindo uma melhor visualização da distribuição dos dados e da presença de possíveis valores atípicos.
+
+As variáveis qualitativas foram analisadas por meio de tabelas de frequência absoluta e relativa, acompanhadas de gráficos de barras para facilitar a interpretação dos resultados. Também foram exploradas associações entre variáveis, utilizando gráficos de dispersão e o coeficiente de correlação de Pearson para variáveis quantitativas, além de tabelas de contingência e medidas de associação para variáveis categóricas.
+
+Por fim, foram construídos mapas coropléticos para representar a distribuição geográfica dos casos de bruxaria nos condados escoceses, possibilitando a identificação de padrões espaciais e regiões com maior concentração de acusações.
+
+# 5. Análises Descritivas
+
+### 5.1 Variáveis quantitativas
+#### **Ano de início dos julgamentos**
+
+<div style="max-width: 900px; margin: 0 auto;">
+
+<table style="border-collapse: collapse; width: 100%; text-align: center; font-family: Arial; font-size: 14px;">
+
+  <thead>
+    <tr style="background-color: #e8f5e9; color: #000;">
+      <th style="border: 1px solid #ccc; padding: 8px;">Casos</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Média</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Mediana</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Desvio padrão</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Mínimo</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Quartil 1 (Q1)</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Quartil 3 (Q3)</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Intervalo interquartil (IQR)</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Máximo</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Amplitude</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Assimetria</th>
+      <th style="border: 1px solid #ccc; padding: 8px;">Curtose</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #ccc; padding: 8px;">2293</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">1644.904</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">1649</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">26.156</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">1507</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">1629</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">1661</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">32</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">1719</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">212</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">-0.593</td>
+      <td style="border: 1px solid #ccc; padding: 8px;">0.95</td>
+    </tr>
+  </tbody>
+
+</table>
+
+</div>
+
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("histograma_ano.png")
+```
+
+#### Interpretação do gráfico
+- **Histograma (verde)**: mostra a distribuição dos anos de início dos julgamentos;
+- **Linha preta suave**: estimativa da forma contínua da distribuição (densidade);
+- **Linha preta vertical**: média dos anos;
+- **Linha marrom vertical**: mediana (valor central);
+- **Linhas tracejadas**: quartis (Q1 = 25% dos dados, Q3 = 75%).
+
+
+
+
+#### **Número de acusações por acusado**
+````{R}
+summary(case$dias)
+````
+
+### 5.2 Variáveis qualitativas binárias
+#### **Gênero dos acusados**
+
+#### **Confissão (sim/não)**
+
+#### **Tortura (sim/não)**
+
+### 5.2 Variáveis qualitativas nominais
+#### **Condados da Escócia**
+
+#### **Relação familiar do acusado**
+
+> Gráfico de barras horizontais
+
+```{r, echo=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("grafico_condado.png")
+```
+
+<p style="text-align:center; font-size:12px; margin-top:-10px;">
+Fonte: Survey of Scottish Witchcraft (University of Edinburgh)
+</p>
+
+> Análise espacial
+
+```{r, echo=FALSE, out.width="100%"}
+knitr::include_graphics("mapa_foto.png")
+```
+
+<p style="text-align:center; font-size:12px; margin-top:-10px;">
+Fonte: Survey of Scottish Witchcraft (University of Edinburgh)
+</p>
+
+# 6. Análise de associação entre variáveis
+### 6.1 Quantitativa × Quantitativa
+
+### 6.2 Qualitativa × Qualitativa
+
+### 6.3 Qualitativa × Quantitativa
+
+# 7. Discussão dos resultados
+
+# 8. Conclusão
+
+# 9. Referências
+
+# 10. Apêndice
